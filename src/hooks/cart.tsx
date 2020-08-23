@@ -23,6 +23,8 @@ interface CartContext {
   decrement(id: string): void;
 }
 
+const STORAGE_PRODUCTS_KEY = '@GoMarketplace:products';
+
 const CartContext = createContext<CartContext | null>(null);
 
 const CartProvider: React.FC = ({ children }) => {
@@ -30,9 +32,7 @@ const CartProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
-      const storedProducts = await AsyncStorage.getItem(
-        '@GoMarketplace:products',
-      );
+      const storedProducts = await AsyncStorage.getItem(STORAGE_PRODUCTS_KEY);
 
       if (storedProducts) {
         setProducts([...JSON.parse(storedProducts)]);
@@ -56,7 +56,7 @@ const CartProvider: React.FC = ({ children }) => {
         setProducts([...products, { ...product, quantity: 1 }]);
       }
       await AsyncStorage.setItem(
-        '@GoMarketplace:products',
+        STORAGE_PRODUCTS_KEY,
         JSON.stringify(products),
       );
     },
@@ -74,7 +74,7 @@ const CartProvider: React.FC = ({ children }) => {
       setProducts(newProducts);
 
       await AsyncStorage.setItem(
-        '@GoMarketplace:products',
+        STORAGE_PRODUCTS_KEY,
         JSON.stringify(newProducts),
       );
     },
@@ -95,7 +95,7 @@ const CartProvider: React.FC = ({ children }) => {
       setProducts(newProducts);
 
       await AsyncStorage.setItem(
-        '@GoMarketplace:products',
+        STORAGE_PRODUCTS_KEY,
         JSON.stringify(newProducts),
       );
     },
